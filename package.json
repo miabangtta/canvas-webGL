@@ -4,14 +4,16 @@
   "description": "",
   "main": "sketch.js",
   "scripts": {
-    "start": "canvas-sketch sketch.js --open",
+    "start-canvas": "canvas-sketch sketch.js --open",
+    "start": "canvas-sketch webgl.js --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "canvas-sketch": "^0.7.4"
+    "canvas-sketch": "^0.7.4",
+    "three": "^0.129.0"
   },
   "devDependencies": {
     "canvas-sketch-util": "^1.10.0",
