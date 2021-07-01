@@ -7,8 +7,13 @@ require("three/examples/js/controls/OrbitControls");
 const canvasSketch = require("canvas-sketch");
 const random = require("canvas-sketch-util/random");
 const palettes = require('nice-color-palettes');
+const eases = require('eases');
+const BezierEasing = require('bezier-easing');
 
 const settings = {
+  dimensions: [512, 512],
+  fps: 24, // frames per second. enough for a good quality, 30 for better quality
+  duration: 4,
   // Make the loop animated
   animate: true,
   // Get a WebGL canvas rather than 2D
@@ -31,12 +36,14 @@ const sketch = ({ context }) => {
   // Setup your scene
   const scene = new THREE.Scene();
 
+  const palette = random.pick(palettes);
+
   const box = new THREE.BoxGeometry(1, 1, 1);
   for (let i = 0; i < 40; i++) {
     const mesh = new THREE.Mesh(
         box,
-        new THREE.MeshBasicMaterial({
-          color: 'red',
+        new THREE.MeshStandardMaterial({
+          color: random.pick(palette),
         })
     );
     mesh.position.set(random.range(-1, 1), random.range(-1, 1), random.range(-1, 1));
@@ -44,6 +51,14 @@ const sketch = ({ context }) => {
     mesh.scale.multiplyScalar(0.25);
     scene.add(mesh);
   }
+
+  scene.add(new THREE.AmbientLight('blue'));
+
+  const light = new THREE.DirectionalLight('white', 1);
+  light.position.set(2,4,0);
+  scene.add(light);
+
+  const easeFn = BezierEasing(.58,.04,.43,.96);
 
   return {
     // Handle resize events here
@@ -69,8 +84,9 @@ const sketch = ({ context }) => {
       camera.updateProjectionMatrix();
     },
     // Update & render your scene here
-    render({ time }) {
-      // mesh.rotation.y = time * (10 * Math.PI / 100);
+    render({ playhead }) {
+      const t = Math.sin(playhead * Math.PI);
+      scene.rotation.z = easeFn(t);
       renderer.render(scene, camera);
     },
     // Dispose of events & renderer for cleaner hot-reloading
