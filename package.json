@@ -5,7 +5,8 @@
   "main": "sketch.js",
   "scripts": {
     "start-canvas": "canvas-sketch sketch.js --open",
-    "start": "canvas-sketch webgl.js --open",
+    "start-webgl": "canvas-sketch webgl.js --open",
+    "start": "canvas-sketch shader.js --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
